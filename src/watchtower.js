@@ -14,7 +14,7 @@ export function createWatchtower({ rest, chainId, rollupId, operator, witnessNam
   const env = { chainId, rollupId }
   let ledger = new QledgerLedger()
   const seen = new Map() // origin|size -> post, to catch a split view
-  const report = { batches: 0, posts: 0, verified: 0, foreign: 0, bad: [], splitViews: [], fraud: [] }
+  const report = { withdrawals: [], batches: 0, posts: 0, verified: 0, foreign: 0, bad: [], splitViews: [], fraud: [] }
   let next = 0, logKeys
   const flagged = new Set()
 
@@ -47,7 +47,7 @@ export function createWatchtower({ rest, chainId, rollupId, operator, witnessNam
       else seen.set(k, p)
     }
     if (fraud) ledger = parent // the chain rolls the inbox back; the resubmitted batch replays from the parent
-    else report.batches++
+    else { report.batches++; if (honest.withdrawals.length) report.withdrawals.push({ batchIndex: b.batchIndex, status: b.status, all: honest.withdrawals }) }
     return fraud
   }
 
