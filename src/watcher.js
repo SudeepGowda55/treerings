@@ -8,7 +8,9 @@ import { makeTileReader, USER_AGENT } from './tiles.js'
 import { cosign, originOf } from './cosign.js'
 import { encodePost } from './post.js'
 import { ROLLUP_ID, CHAIN_ID } from './rollup.js'
-import { planQledgerBatch, QledgerLedger, hexToBytes } from '@qorechain/rdk'
+import { planQledgerBatch, QledgerLedger, hexToBytes, fetchQledgerEntries } from '@qorechain/rdk'
+import { newestEntries, dnsNames } from './certs.js'
+import { openWatchlist, sealAlert, matches } from './watchlist.js'
 
 const STATE = new URL('../state/watcher.json', import.meta.url)
 const load = () => { try { return JSON.parse(readFileSync(STATE)) } catch { return { heads: {}, refused: [], ledger: [], lastBatchAt: 0 } } }
@@ -66,6 +68,51 @@ export async function settle({ rdk, state, say = console.log }) {
   save(state)
   say(`batch ${plan.input.batchIndex} (inbox to ${plan.input.inboxEnd}, ${plan.entries.length} posts) -> ${r.transactionHash}`)
   return plan
+}
+
+// Sealed watchlists: read new inbox posts, open the lists sealed to this witness, then check the newest
+// certificates of a few tiled logs against them and seal each owner's hits back to them as one post.
+export async function scanWatchlists({ rdk, sealKeys, state, logsPerRound = 6, say = console.log }) {
+  const wl = (state.wl ??= { seq: 0, acc: '00'.repeat(32), lists: {}, seen: {}, cursor: 0, alerts: [] })
+  const head = (await rdk.rest.getInbox(ROLLUP_ID)).headSequence
+  if (head > wl.seq) {
+    const entries = await fetchQledgerEntries(rdk.rest, { chainId: CHAIN_ID, rollupId: ROLLUP_ID, from: wl.seq, to: head, accFrom: wl.acc })
+    for (const e of entries) {
+      const list = openWatchlist({ chainId: CHAIN_ID, keys: sealKeys, poster: e.poster, data: Buffer.from(e.payload) })
+      if (list) { wl.lists[e.poster] = list.domains; say(`watchlist from ${e.poster}: ${list.domains.length} names (sealed)`) }
+    }
+    wl.acc = (await rdk.rest.getPostedData(ROLLUP_ID, head)).inboxAcc
+    wl.seq = head
+  }
+  const owners = Object.keys(wl.lists)
+  if (!owners.length) return
+  const list = await fetch(LOG_LIST, { headers: { 'user-agent': USER_AGENT } }).then(r => r.json())
+  const tiled = usableLogs(list).filter(l => l.kind === 'tiled')
+  const hits = {}
+  for (let k = 0; k < Math.min(logsPerRound, tiled.length); k++) {
+    const log = tiled[(wl.cursor + k) % tiled.length]
+    try {
+      const head = await fetchHead(log)
+      if (!head.valid) continue
+      const { first, entries } = await newestEntries(log.url, head.treeSize)
+      entries.forEach((e, i) => {
+        const names = dnsNames(e.der)
+        for (const owner of owners) {
+          const name = names.find(n => wl.lists[owner].some(d => matches(n, d)))
+          const key = `${log.logId}:${first + i}`
+          if (name && !wl.seen[key]) { wl.seen[key] = 1; (hits[owner] ??= []).push({ name, log: log.name, index: first + i, precert: e.precert, loggedAt: e.timestamp }) }
+        }
+      })
+    } catch (e) { say(`watchlist scan ${log.name}: ${e.message}`) }
+  }
+  wl.cursor = (wl.cursor + logsPerRound) % tiled.length
+  for (const [owner, h] of Object.entries(hits)) {
+    const data = await sealAlert({ rest: rdk.restUrl, chainId: CHAIN_ID, owner, hits: h.slice(0, 15) /* a post is capped at 6 KiB */ })
+    const r = await rdk.tx.postRollupData({ rollupId: ROLLUP_ID, data })
+    wl.alerts.push({ owner, count: h.length, tx: r.transactionHash, at: Date.now() })
+    say(`sealed alert to ${owner}: ${h.length} new certificates -> ${r.transactionHash}`)
+  }
+  save(state)
 }
 
 export { load, save }

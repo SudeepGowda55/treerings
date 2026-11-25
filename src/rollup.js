@@ -14,5 +14,5 @@ export async function connectRdk(mnemonic) {
   const pqcKeypair = derivePqcCanonical(acct.address, mnemonic)
   const signer = await directSignerFromPrivateKey(acct.privateKey, 'qor')
   const tx = await RdkTxClient.connect(endpoints.rpc, signer, { pqcKeypair, rest: endpoints.rest, gasPrice: '0.15uqor' })
-  return { tx, rest: new RestClient(endpoints.rest), address: acct.address, pqcKeypair }
+  return { tx, rest: new RestClient(endpoints.rest), restUrl: endpoints.rest, address: acct.address, pqcKeypair }
 }
