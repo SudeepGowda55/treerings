@@ -8,5 +8,15 @@
   "witness": "treerings.witness/1",
   "witnessKeyId": "c8985278",
   "registerTx": "0xb19fa4fd5257749d7c0c2b9bd00872b4665f90047e868f1d97f134271b10f124",
-  "bond": "25 QOR"
+  "bond": "25 QOR",
+  "rollup": {
+    "id": "tree-rings",
+    "profile": "custom",
+    "settlement": "optimistic",
+    "sequencing": "based",
+    "executionVm": "qledger-v1",
+    "createTx": "7398AA3C8DAA95B6DCEB34F3A8568DE53E72EFE9984B415AAA76F3784BF254C1",
+    "submitterBondTx": "929A7CDDE96EBAA221A07A1B47257EE8621A12BFD72C2E9FFC9200455B15E2D9",
+    "operator": "qor10g9cpapf33ttmp4gpy0easzh7dj9x8570luymd"
+  }
 }
