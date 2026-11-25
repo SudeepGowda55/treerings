@@ -96,8 +96,9 @@ export function verifyConsistency(first, second, firstHash, secondHash, proof) {
 }
 
 // Live reads. Every caller decides what to do with an invalid or unreachable log; nothing here throws on a bad log.
-const getJson = (url) => fetch(url, { signal: AbortSignal.timeout(15000) }).then(r => { if (!r.ok) throw new Error(`${r.status} ${url}`); return r.json() })
-const getText = (url) => fetch(url, { signal: AbortSignal.timeout(15000) }).then(r => { if (!r.ok) throw new Error(`${r.status} ${url}`); return r.text() })
+const UA = { 'user-agent': 'treerings/0.1 (+https://github.com/SudeepGowda55/treerings)' }
+const getJson = (url) => fetch(url, { headers: UA, signal: AbortSignal.timeout(15000) }).then(r => { if (!r.ok) throw new Error(`${r.status} ${url}`); return r.json() })
+const getText = (url) => fetch(url, { headers: UA, signal: AbortSignal.timeout(15000) }).then(r => { if (!r.ok) throw new Error(`${r.status} ${url}`); return r.text() })
 
 export async function fetchHead(log) {
   if (log.kind === 'rfc6962') return parseSth(log, await getJson(new URL('ct/v1/get-sth', log.url)))
