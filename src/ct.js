@@ -34,6 +34,12 @@ function digitallySigned(buf) {
   return { hashAlg: buf[0], sigAlg: buf[1], sig: buf.subarray(4) }
 }
 
+// Both kinds end in the same check: the log's key over the TreeHeadSignature bytes, so a third party holding only
+// (timestamp, size, root, DigitallySigned) and Chrome's log list can re-check a head.
+export function logSignatureValid(keyB64, head) {
+  try { return logKeyVerifies(keyB64, treeHeadSignedBytes(head), digitallySigned(head.logSignature)) } catch { return false }
+}
+
 function logKeyVerifies(keyB64, data, ds) {
   if (ds.hashAlg !== 4) return false // sha256, the only hash CT allows
   return verify('sha256', data, createPublicKey({ key: b64(keyB64), format: 'der', type: 'spki' }), ds.sig)
@@ -42,7 +48,8 @@ function logKeyVerifies(keyB64, data, ds) {
 // RFC 6962: the JSON a log returns from get-sth, checked against the log's key.
 export function parseSth(log, json) {
   const head = { log: log.name, kind: log.kind, treeSize: Number(json.tree_size), timestamp: Number(json.timestamp), rootHash: b64(json.sha256_root_hash) }
-  head.valid = logKeyVerifies(log.key, treeHeadSignedBytes(head), digitallySigned(b64(json.tree_head_signature)))
+  head.logSignature = b64(json.tree_head_signature)
+  head.valid = logSignatureValid(log.key, head)
   return head
 }
 
@@ -64,7 +71,8 @@ export function parseCheckpoint(log, text) {
     const blob = b64(m[2])
     if (!blob.subarray(0, 4).equals(keyId)) continue // another signer, e.g. a witness cosignature
     head.timestamp = Number(blob.readBigUInt64BE(4))
-    head.valid = logKeyVerifies(log.key, treeHeadSignedBytes(head), digitallySigned(blob.subarray(12)))
+    head.logSignature = blob.subarray(12)
+    head.valid = logSignatureValid(log.key, head)
     head.otherSignatures = (sigs.match(/^— /gm) ?? []).length - 1
   }
   return head
