@@ -1,0 +1,52 @@
+{
+ "recorded": "2026-11-25T06:13:17.806Z",
+ "log": {
+  "kind": "rfc6962",
+  "operator": "Cloudflare",
+  "name": "Cloudflare Nimbus2026",
+  "url": "https://ct.cloudflare.com/logs/nimbus2026/",
+  "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2FxhT6xq0iCATopC9gStS9SxHHmOKTLeaVNZ661488Aq8tARXQV+6+jB0983v5FkRm4OJxPqu29GJ1iG70Ahow==",
+  "logId": "yzj3FYl8hKFEX1vB3fvJbvKaWc1HCmkFhbDLFMMUWOc="
+ },
+ "first": {
+  "tree_size": 6828046984,
+  "timestamp": 1795583536977,
+  "sha256_root_hash": "aVRkpAhLEleO2j9x1hWyW1eiOaZrhond9MElmYgW7pc=",
+  "tree_head_signature": "BAMARjBEAiBpp5KGsPBGfvoS2S7Jswhk/4XDBTNR/CUzgfvqzDqvbwIgSrgDdXaly+LF9xf5HxyJpPogoxUe8qE1Zb6ZWVIdAfI="
+ },
+ "second": {
+  "tree_size": 6828176246,
+  "timestamp": 1795587128759,
+  "sha256_root_hash": "1kuM4Xi7nMY/9osy5pw8uFneqcSuyeCapZdyzARbDrY=",
+  "tree_head_signature": "BAMASDBGAiEAkGU7NW2KlYeO7/3HghU9G6H3iy4SkinxhR0wogoSXLkCIQCaWm74qwSXL66hjn87D0kU9XyFOPf39cs4v5yXqmMfIA=="
+ },
+ "proof": [
+  "H5E1XumFP+7n7gmiUzEcUqzraREYoekL+Mb0Y1icQ/U=",
+  "3sZjPLW9+Gd364jzMCIyTveipdIBxjzrgq06jeh9YXw=",
+  "zMvTM88rypRmYlrrRnlRZTKNrtQvW18Kde812r5jHto=",
+  "a1YOd91ncWGAMhzVXM/LjTWAylOBQFuKVe9Qx6XEDdc=",
+  "98aG85w1ioKgyOemipnbKluX8EbE900yiakevqJyuGc=",
+  "i8TK37cofJnGQPejhFrhxYqZOo5hpcS7SUwzKAcEidE=",
+  "e0WLY2vMh3tanGOEEjAvJRWqg7snVqyz0IZfcu1HHCU=",
+  "7wbqzih7hpYzqCpy0P23z2a04jzM3/kVguJrPgciEnA=",
+  "ZsoAxlcAoC6qlr7YCupT7FriFT7v1lMVRXFzYreInvo=",
+  "eCZhn+jl7RbVFN672VE+4aUUERnRQC/PIo2W9LNY+yg=",
+  "Bd7BaZ0Yz6j0TJOZqcfU3VZkqdl9eDZjJs6F3bqDisI=",
+  "6mywggFqaehyfPnRlz/Tuo4/dcQDGBnuZmWwYyvvLYM=",
+  "iPKvo/MNkTxtd0pikWJLPV/wuNy2OxSyhMqZCZX4tkY=",
+  "SCaBR42wZlvUc/g6hvS/dbUUbI7yPFX9H72+oIJ6MZg=",
+  "6b7vmx1tu+DAXTfXcD0nbrfE45mptl54otdjgrfq7Dg=",
+  "lWh8syNM8RVz8eSwdAFJhYVqJRypPgPGD9LGfNwVZLw=",
+  "Ogu7nG1ArCY3vLZFQqfwLdhVcSAkuCuu/Erg61VM8CQ=",
+  "tm2JZ/GGxFSpvdgKuSze+FnVRagvzdElaGU/8NYsQpc=",
+  "1JVL2qR/LB1/aE0/MqyAozmVqkBAD5rBjC0UOZJKM7o=",
+  "cYF/bPQgZfKf7rUa6hmej+NKtMbsG4ffDjrUZQCdJUc=",
+  "t/bTCbDFrP41WPFbER28CqJMlaQ8y24Pbk0Eq9zAyIs=",
+  "0pvO+xUxHFZw5+V5bmIQMABMU1U0zCZ/Ea0ZnEcmdOQ=",
+  "b/jcL2qKbJJuRq7TXNLQzc8UjJLAFjsaOfuZGA4lZjs=",
+  "9chnHeVgSXqPZ/wAToyznTckoHdAEULt564Ywdxmuqk=",
+  "rV/HmjUPI6j2SscQVLJZzMOFOl5MMcd7irtcerFTNhQ=",
+  "XqKCJDPROivXudZBZw455MC3Q1Fz3bihcdHWoZUu+kg=",
+  "VZ80Wi2AW4jrSfdMYnuEwx0IXabhn6vEtj2UcHVvW3M="
+ ]
+}
