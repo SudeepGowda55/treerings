@@ -1,0 +1,12 @@
+{
+  "chainId": 9800,
+  "witnessBond": "0xad291677de1c58615764d440e641134ccc0f255b",
+  "deployTx": "0xc9ca4c726a5159ed8498edcd6f65d6e7f563aeaa683b36e7d4a5aff3117d7028",
+  "deployer": "0xC92D626c5d8EE188F39DF3532CA19C1B7f072443",
+  "minBond": "10 QOR",
+  "unbondDelaySeconds": 600,
+  "witness": "treerings.witness/1",
+  "witnessKeyId": "c8985278",
+  "registerTx": "0xb19fa4fd5257749d7c0c2b9bd00872b4665f90047e868f1d97f134271b10f124",
+  "bond": "25 QOR"
+}
